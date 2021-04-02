@@ -1,0 +1,1 @@
+# alpine-gitlab-ci-changelog
