@@ -1,107 +1,89 @@
 #!/bin/bash
-
 IFS=`echo -en "\n\b"`
 echo -en $IFS
 
 if [ -f "CHANGELOG.md" ];then
     rm -f CHANGELOG.md
+    touch CHANGELOG.md
+else
+    touch CHANGELOG.md
 fi
-touch CHANGELOG.md
+
 if [ -f "CHANGELOG.txt" ];then
     rm -f CHANGELOG.txt
+    touch CHANGELOG.txt
+else
+    touch CHANGELOG.txt
 fi
-touch CHANGELOG.txt
 
-tagCreateDate="# ${CI_COMMIT_TAG} ("`date "+%Y-%m-%d"`"）"
-
-echo $tagCreateDate >> CHANGELOG.md
-echo $tagCreateDate >> CHANGELOG.txt
+echo "# ${CI_COMMIT_TAG}" >> CHANGELOG.md
+echo "# ${CI_COMMIT_TAG}" >> CHANGELOG.txt
 
 function printFeat(){
-    for i in ${!feat[@]}
+    for i in ${feat[@]}
     do
-        printChangeLog ${feat[i]} "feat:" $i
+        echo "- "$i >> CHANGELOG.md
+        echo "- "$i >> CHANGELOG.txt
     done
     echo >> CHANGELOG.md
     echo >> CHANGELOG.txt
 }
 
 function printFix(){
-    for i in ${!fix[@]}
+    for i in ${fix[@]}
     do
-        printChangeLog ${fix[i]} "fix:" $i
+        echo "- "$i >> CHANGELOG.md
+        echo "- "$i >> CHANGELOG.txt
     done
     echo >> CHANGELOG.md
     echo >> CHANGELOG.txt
 }
 
 function printPerf(){
-    for i in ${!perf[@]}
+    for i in ${perf[@]}
     do
-        printChangeLog ${perf[i]} "perf:" $i
+        echo "- "$i >> CHANGELOG.md
+        echo "- "$i >> CHANGELOG.txt
     done
     echo >> CHANGELOG.md
     echo >> CHANGELOG.txt
 }
 
 function printRefactor(){
-    for i in ${!refactor[@]}
+    for i in ${refactor[@]}
     do
-        printChangeLog ${refactor[i]} "refactor:" $i
-    done
-    echo >> CHANGELOG.md
-    echo >> CHANGELOG.txt
-}
-
-function printStyle(){
-    for i in ${!style[@]}
-    do
-        printChangeLog ${style[i]} "style:" $i
+        echo "- "$i >> CHANGELOG.md
+        echo "- "$i >> CHANGELOG.txt
     done
     echo >> CHANGELOG.md
     echo >> CHANGELOG.txt
 }
 
 function printOther(){
-    for i in ${!other[@]}
+    for i in ${other[@]}
     do
-        printChangeLog ${other[i]} "other:" $i
+        echo "- "$i >> CHANGELOG.md
     done
     echo >> CHANGELOG.md
-    echo >> CHANGELOG.txt
-}
-
-function printChangeLog() {
-    text=`expr $3 + 1`"."${1/$2/""};
-    echo ${text} >> CHANGELOG.md
-    echo ${text} >> CHANGELOG.txt
 }
 
 function checkLog(){
-    if [[ $1 == "feat:"* ]]
+    if [[ $1 == "feat"* ]]
     then
         feat[featIndex]=$1
         let featIndex++
-    elif [[ $1 == "fix:"* ]]
+    elif [[ $1 == "fix"* ]]
     then
         fix[fixIndex]=$1
         let fixIndex++
-    elif [[ $1 == "perf:"* ]]
+    elif [[ $1 == "perf"* ]]
     then
         perf[perfIndex]=$1
         let perfIndex++
-    elif [[ $1 == "refactor:"* ]]
+    elif [[ $1 == "refactor"* ]]
     then
         refactor[refactorIndex]=$1
         let refactorIndex++
-    elif [[ $1 == "style:"* ]]
-    then
-        style[styleIndex]=$1
-        let styleIndex++
-    elif [[ $1 == "other:"* ]]
-    then
-        other[otherIndex]=$1
-        let otherIndex++
     fi
 }
 
@@ -130,17 +112,10 @@ function printLog(){
         printRefactor
     fi
 
-    if [[ $styleIndex -ne 0 ]]; then
-        echo "### 样式" >> CHANGELOG.md
-        echo "### 样式" >> CHANGELOG.txt
-        printStyle
-    fi
-
-    if [[ $otherIndex -ne 0 ]]; then
-        echo "### 其他" >> CHANGELOG.md
-        echo "### 其他" >> CHANGELOG.txt
-        printOther
-    fi
+#    if [[ $otherIndex -ne 0 ]]; then
+#        echo "### Other Changes" >> CHANGELOG.md
+#        printOther
+#    fi
 
     feat=()
     featIndex=0
@@ -156,12 +131,6 @@ function printLog(){
 
     refactor=()
     refactorIndex=0
-
-    style=()
-    styleIndex=0
-
-    other=()
-    otherIndex=0
 }
 
 curDate=""
@@ -175,14 +144,12 @@ function checkDate()
     printLog
 
     echo >> CHANGELOG.md
-    echo >> CHANGELOG.txt
     echo "## "$curDate >> CHANGELOG.md
-    echo "## "$curDate >> CHANGELOG.txt
 }
 
 tags_id=""
 
-if [ ! $1 = ${CI_COMMIT_TAG} ]; then
+if [ ! "$1" = "" ]; then
   tags_id="$1...${CI_COMMIT_TAG}"
 fi
 
@@ -192,9 +159,14 @@ index=0
 
 for i in ${commitMessageList[@]}
 do
-    if [[ $index%2 -ne 0 ]]; then
+    if [[ $index%2 -eq 0 ]]
+    then
+        checkDate $i
+    else
+        #echo "- "$i >> CHANGELOG.md
         checkLog $i
     fi
+
     let index++
 done
 
