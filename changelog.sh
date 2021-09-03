@@ -72,7 +72,7 @@ function printOther(){
 }
 
 function printChangeLog() {
-    text=`expr $3 + 1`"."${1/$2/""};
+    text=`expr $3 + 1`". "${1/$2/""};
     echo ${text} >> CHANGELOG.md
     echo ${text} >> CHANGELOG.txt
 }
