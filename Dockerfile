@@ -18,4 +18,4 @@ RUN rm -rf /var/cache/apk/* \
 
 COPY changelog.sh /changelog.sh
 
-COPY release.sh /release.sh
+COPY release-13.x.sh /release.sh

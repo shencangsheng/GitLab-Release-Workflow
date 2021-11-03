@@ -16,3 +16,6 @@ script:
      - git commit -m "create chengelog"
      - git push -f origin HEAD:$CI_COMMIT_TAG
 ````
+## Gitlab Version For API
+> version <= 13.x >>  `release-13.x.sh`
+> version >= 14.x >>  `release-14.x.sh`
