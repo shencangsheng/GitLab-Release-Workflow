@@ -5,17 +5,13 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
 
 RUN apk update \
         && apk upgrade \
-        && apk add --no-cache bash \
-        bash-doc \
-        bash-completion
-
-RUN apk add --no-cache git
-
-RUN apk add curl
+        && apk add --no-cache bash git curl
 
 RUN rm -rf /var/cache/apk/* \
         && /bin/bash
 
 COPY changelog.sh /changelog.sh
 
-COPY release-13.x.sh /release.sh
+ENV GITLAB_VERSION 14.x
+
+COPY release-${GITLAB_VERSION}.sh /release.sh
