@@ -1,10 +1,12 @@
 
-# alpine-gitlab-ci-changelog
-## 如何使用
-1. 编译镜像 `bash deployment.sh`
-2. 在项目中创建访问令牌需要api、push代码权限
-3. 将访问令牌存入CI/CD环境变量中`Access_Token:令牌`
-4. 将如下代码加入到CI里(如果只想推送release-note就只保留第一行即可)
+# Minimal using Alpine as base image, release- Changelog is generated in GitLab CI/CD
+
+[ GitHub  Repositorie ](https://github.com/shencangsheng/alpine-gitlab-ci-changelog)
+
+## How to use for your
+1. Creating access tokens in a project requires API, push code permissions
+2. Store the access token in the CI/CD environment variable 'Access_Token: token'
+3. Add the following code to the CI ( just keep the first line if you just want to push release-note )
 ```` 
 image: gitlab/bash:latest
 script:
@@ -16,7 +18,7 @@ script:
      - git commit -m "create chengelog"
      - git push -f origin HEAD:$CI_COMMIT_TAG
 ````
-## Gitlab Version For API
-> version <= 13.x >>  `release-13.x.sh`
+## GitLab Version For API
+> ( version <= 13.x )  :  `13.x`
 >
-> version >= 14.x >>  `release-14.x.sh`
+> ( version >= 14.x ) :  `14.x`
