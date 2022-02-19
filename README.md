@@ -8,7 +8,7 @@
 2. Store the access token in the CI/CD environment variable 'Access_Token: token'
 3. Add the following code to the CI ( just keep the first line if you just want to push release-note )
 ```` 
-image: gitlab/bash:latest
+image: shencangsheng/gitlab-release-changelog
 script:
      - bash /release.sh
      - git config user.name "${GITLAB_USER_NAME}"
