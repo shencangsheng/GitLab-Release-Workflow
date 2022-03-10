@@ -1,6 +1,8 @@
 
 # Minimal using Alpine as base image, release- Changelog is generated in GitLab CI/CD
 
+NOTE, This repo, now deprecated; all new releases for repo will be published in [shencangsheng/Git-Release-Workflow](https://github.com/shencangsheng/Git-Release-Workflow)
+
 [ GitHub  Repositorie ](https://github.com/shencangsheng/alpine-gitlab-ci-changelog)
 
 ## How to use for your
